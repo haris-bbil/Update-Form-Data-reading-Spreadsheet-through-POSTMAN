@@ -1,0 +1,221 @@
+{
+	"info": {
+		"_postman_id": "f525262c-7586-4a25-9c0b-28a7666e8dca",
+		"name": "Timec Data Update Script",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6909601",
+		"_collection_link": "https://harismifta.postman.co/workspace/Xptrack-Project~2e0f2b92-e9ce-4f30-b6d4-ce9068fc9f96/collection/6909601-f525262c-7586-4a25-9c0b-28a7666e8dca?action=share&source=collection_link&creator=6909601"
+	},
+	"item": [
+		{
+			"name": "get item",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();",
+							"if (response.data && response.data.length > 0) {",
+							"    const id = response.data[0].id;",
+							"    pm.environment.set(\"id\", id);",
+							"    pm.variables.set(\"update_required\", true); // Set flag for the next request",
+							"} else {",
+							"    console.warn(`No ID found for stock_no: ${pm.variables.get(\"stock_no\")}`);",
+							"    pm.environment.set(\"id\", \"\"); // Clear ID",
+							"    pm.variables.set(\"update_required\", false); // Skip the next request",
+							"    ",
+							"    // Log the stock_no to a collection variable for tracking",
+							"    const failedStockNos = pm.collectionVariables.get(\"failed_stock_nos\") || [];",
+							"    failedStockNos.push(pm.variables.get(\"stock_no\"));",
+							"    pm.collectionVariables.set(\"failed_stock_nos\", failedStockNos);",
+							"",
+							"    // Stop execution of the next request",
+							"    postman.setNextRequest(null);",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true,
+					"accept-encoding": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/inventory-items?limit=1&offset=0&stock_no={{stock_no}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"inventory-items"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "1"
+						},
+						{
+							"key": "offset",
+							"value": "0"
+						},
+						{
+							"key": "stock_no",
+							"value": "{{stock_no}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.response.code === 200) {",
+							"    console.log(\"Cost updated successfully for ID: \" + pm.environment.get(\"id\"));",
+							"} else {",
+							"    console.error(\"Failed to update cost. Response: \", pm.response.text());",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Get the cost from variables\r",
+							"let cost = pm.variables.get(\"cost\");\r",
+							"\r",
+							"// Remove the \"$\" sign if present\r",
+							"if (cost && typeof cost === \"string\") {\r",
+							"    cost = cost.replace(/\\$/g, \"\"); // Remove all occurrences of \"$\"\r",
+							"    pm.variables.set(\"cost\", cost); // Update the variable\r",
+							"}\r",
+							"\r",
+							"// Check if cost is valid\r",
+							"if (isNaN(cost)) {\r",
+							"    console.error(`Invalid cost: ${cost}`);\r",
+							"    postman.setNextRequest(null); // Skip this request if cost is invalid\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true,
+					"accept-encoding": true
+				}
+			},
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"last_cost_per_unit\": {{cost}}\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/inventory-items/{{id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"inventory-items",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "failed_stock_nos",
+			"value": ""
+		}
+	]
+}
