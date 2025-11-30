@@ -14,24 +14,30 @@
 						"id": "9c3d6b24-afd9-4b0b-b4f2-885c7f51d2c8",
 						"exec": [
 							"pm.test(\"Check Required Field Validation\", function () {\r",
-							"var jsonData = JSON.parse(responseBody);\r",
-							"pm.environment.set(\"token_type\", jsonData.token_type);\r",
-							"pm.environment.set(\"access_token\", jsonData.access_token);\r",
-							"pm.expect(jsonData.errors.client_id[0]).to.eql(\"The client id field is required.\");\r",
-							"pm.expect(jsonData.errors.client_secret[0]).to.eql(\"The client secret field is required.\");\r",
-							"pm.expect(jsonData.errors.grant_type[0]).to.eql(\"The grant type field is required.\");\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    pm.environment.set(\"token_type\", jsonData.token_type);\r",
+							"    pm.environment.set(\"access_token\", jsonData.access_token);\r",
+							"    pm.expect(jsonData.errors.client_id[0]).to.eql(\"The client id field is required.\");\r",
+							"    pm.expect(jsonData.errors.client_secret[0]).to.eql(\"The client secret field is required.\");\r",
+							"    pm.expect(jsonData.errors.grant_type[0]).to.eql(\"The grant type field is required.\");\r",
 							"});\r",
 							""
 						],
 						"type": "text/javascript",
-						"packages": {}
+						"packages": {},
+						"requests": {}
 					}
 				},
 				{
 					"listen": "prerequest",
 					"script": {
+						"id": "e20615d5-d5fe-4771-99de-e92c4ba03f39",
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
 						"packages": {},
-						"type": "text/javascript"
+						"requests": {}
 					}
 				}
 			],
