@@ -1,0 +1,98 @@
+{
+	"info": {
+		"_postman_id": "6909601-c9207ff4-6077-4dfd-8f56-43ed2f331921",
+		"name": "Authentication",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9c3d6b24-afd9-4b0b-b4f2-885c7f51d2c8",
+						"exec": [
+							"pm.test(\"Check Required Field Validation\", function () {\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.environment.set(\"token_type\", jsonData.token_type);\r",
+							"pm.environment.set(\"access_token\", jsonData.access_token);\r",
+							"pm.expect(jsonData.errors.client_id[0]).to.eql(\"The client id field is required.\");\r",
+							"pm.expect(jsonData.errors.client_secret[0]).to.eql(\"The client secret field is required.\");\r",
+							"pm.expect(jsonData.errors.grant_type[0]).to.eql(\"The grant type field is required.\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "6909601-8ea19c19-0e01-468d-9858-ef32b0cef8a1",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"client_id\": \"9e06d109-e016-44fe-a5e8-377803943970\",\r\n    \"client_secret\": \"pSHQK7ISnAevEdU3S06ZdgAEeX45mgpWI6ZilneN\",\r\n    \"grant_type\": \"client_credentials\"\r\n}"
+				},
+				"url": {
+					"raw": "https://haris.xptrackstaging.com/api/v2/oauth/token",
+					"protocol": "https",
+					"host": [
+						"haris",
+						"xptrackstaging",
+						"com"
+					],
+					"path": [
+						"api",
+						"v2",
+						"oauth",
+						"token"
+					],
+					"query": [
+						{
+							"key": "client_id",
+							"value": "9e06d109-e016-44fe-a5e8-377803943970",
+							"disabled": true
+						},
+						{
+							"key": "client_secret",
+							"value": "pSHQK7ISnAevEdU3S06ZdgAEeX45mgpWI6ZilneN",
+							"disabled": true
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"disabled": true
+						}
+					]
+				},
+				"description": "Issue a token from using client credentials"
+			},
+			"response": []
+		}
+	]
+}
