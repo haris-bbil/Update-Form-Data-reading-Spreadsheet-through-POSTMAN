@@ -229,11 +229,4 @@ If the API expects nested JSON in a form field, JSON.stringify the object into a
 ## License
 Add your preferred license here (example below). Replace with your chosen license file if present.
 
-MIT © Your Name
-
----
-
-If you want, I can also:
-- generate a sample Postman collection JSON you can import directly,
-- add a minimal runnable repository structure (package.json / requirements.txt) and sample data.xlsx,
-- or produce a GitHub Action to validate spreadsheet format.
+MIT © Haris.
